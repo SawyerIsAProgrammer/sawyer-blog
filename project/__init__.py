@@ -25,9 +25,6 @@ def create_app():
     login_manager.init_app(app)
     gravatar.init_app(app)
 
-    with app.app_context():
-        db.create_all()
-
     # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
@@ -35,6 +32,10 @@ def create_app():
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    # so the part below should go after the blueprint part above
+    with app.app_context():
+        db.create_all()
 
     return app  
 
